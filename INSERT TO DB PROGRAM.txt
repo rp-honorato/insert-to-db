@@ -1,0 +1,33 @@
+&---------------------------------------------------------------------
+& Report ZINSERT_TO_DB
+&---------------------------------------------------------------------
+&
+&---------------------------------------------------------------------
+REPORT zinsert_to_db.
+
+PARAMETERs pnome type string,
+          pdata type dats,
+          pnif type n LENGTH 8,
+          psexo type c length 1.
+
+DATA lt_tabela TYPE zcadfunc,
+      ls_zcadfunc TYPE zcadfunc,
+      lv_guid     TYPE rsdmem_model.
+
+CALL FUNCTION 'RS_DME_MG_GENERATE_GUID2'
+  IMPORTING
+    e_guid = lv_guid
+  .
+ls_zcadfunc-matricula =  lv_guid.
+ls_zcadfunc-nome = pnome.
+ls_zcadfunc-datanascimento = pdata.
+ls_zcadfunc-nif = pnif.
+ls_zcadfunc-sexo =  psexo.
+
+INSERT INTO zcadfunc VALUES ls_zcadfunc.
+
+IF sy-subrc = 0.
+  WRITE  'Entradas adicionadas.'.
+ELSE.
+  WRITE  'Error'.
+ENDIF.
